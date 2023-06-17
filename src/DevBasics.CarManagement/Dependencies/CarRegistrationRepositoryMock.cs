@@ -22,20 +22,23 @@ namespace DevBasics.CarManagement.Dependencies
         private readonly ILeasingRegistrationRepository _repository;
         private readonly IBulkRegistrationService _service;
         private readonly IMapper _mapper;
+        private readonly IUpdateCar _updateCar;
 
         public CarRegistrationRepository(
             ILeasingRegistrationRepository repository,
             IBulkRegistrationService service,
-            IMapper mapper)
+            IMapper mapper,
+            IUpdateCar updateCar)
         {
             _repository = repository;
             _service = service;
             _mapper = mapper;
+            _updateCar = updateCar;
         }
 
         public Task<CarRegistrationModel> GetApiRegisteredCarAsync(int carDatasetId)
         {
-            var repository = _repository as LeasingRegistrationRepository;
+            var repository = _repository;
             if (repository.Registrations.ContainsKey(carDatasetId))
             {
                 return Task.FromResult(MapToModel(repository.Registrations[carDatasetId].Item1));
@@ -46,7 +49,7 @@ namespace DevBasics.CarManagement.Dependencies
 
         public Task<IList<CarRegistrationModel>> GetApiRegisteredCarsAsync(IList<string> carIdentificationNumbers)
         {
-            var repository = _repository as LeasingRegistrationRepository;
+            var repository = _repository;
             var models = repository
                 .Registrations
                 .Values
@@ -60,7 +63,7 @@ namespace DevBasics.CarManagement.Dependencies
 
         public Task<IList<CarRegistrationModel>> GetApiRegisteredCarsAsync(string registrationRegistrationId)
         {
-            var repository = _repository as LeasingRegistrationRepository;
+            var repository = _repository;
             var models = repository
                 .Registrations
                 .Values
@@ -109,7 +112,7 @@ namespace DevBasics.CarManagement.Dependencies
 
         public Task<IList<CarRegistrationDto>> GetCarsAsync(IList<string> carIdentificationNumbers)
         {
-            var repository = _repository as LeasingRegistrationRepository;
+            var repository = _repository;
             var models = repository
                 .Registrations
                 .Values
@@ -136,7 +139,7 @@ namespace DevBasics.CarManagement.Dependencies
 
         public async Task<int> UpdateRegisteredCarAsync(CarRegistrationDto dbCar, string identity, bool withHistory = true)
         {
-            return await _repository.UpdateCarAsync(dbCar) ? 1 : 0;
+            return await _updateCar.UpdateCarAsync(dbCar) ? 1 : 0;
         }
 
         private CarRegistrationModel MapToModel(CarRegistrationDto dto)

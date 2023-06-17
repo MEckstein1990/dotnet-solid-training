@@ -12,6 +12,8 @@ namespace DevBasics.CarManagement
     public class CarManagementService : BaseService
     {
         private readonly IMapper _mapper;
+        private readonly IInsertHistory _insertHistory;
+        private readonly IUpdateCar _updateCar;
 
         public CarManagementService(
             IMapper mapper,
@@ -22,7 +24,9 @@ namespace DevBasics.CarManagement
             IBulkRegistrationService bulkRegisterService,
             IRegistrationDetailService registrationDetailService,
             ILeasingRegistrationRepository registrationRepository,
-            ICarRegistrationRepository carRegistrationRepository)
+            ICarRegistrationRepository carRegistrationRepository,
+            IInsertHistory insertHistory,
+            IUpdateCar updateCar)
                 : base(settings, httpHeader, apiClient,
                       transactionStateService: transactionStateService,
                       bulkRegistrationService: bulkRegisterService,
@@ -33,6 +37,8 @@ namespace DevBasics.CarManagement
             Console.WriteLine($"Initializing service {nameof(CarManagementService)}");
 
             _mapper = mapper;
+            _insertHistory = insertHistory;
+            _updateCar = updateCar;
         }
 
         public async Task<ServiceResult> RegisterCarsAsync(RegisterCarsModel registerCarsModel, bool isForcedRegistration, Claims claims, string identity = "Unknown")
@@ -257,7 +263,7 @@ namespace DevBasics.CarManagement
                                 uiResponseStatusMsg = TransactionResult.MissingData.ToString();
                             }
 
-                            await new CarRegistrationRepository(LeasingRegistrationRepository, BulkRegistrationService, _mapper).UpdateRegisteredCarAsync(dbCar, identity);
+                            await _updateCar.UpdateCarAsync(dbCar);
                         }
                     }
 
@@ -458,8 +464,8 @@ namespace DevBasics.CarManagement
                     Console.WriteLine(
                         $"Trying to update car {carToUpdate.CarIdentificationNumber} in database...");
 
-                    await LeasingRegistrationRepository.UpdateCarAsync(carToUpdate);
-                    await LeasingRegistrationRepository.InsertHistoryAsync(carToUpdate,
+                    await _updateCar.UpdateCarAsync(carToUpdate);
+                    await _insertHistory.InsertHistoryAsync(carToUpdate,
                         identity,
                         ((carToUpdate.TransactionState.HasValue) ? Enum.GetName(typeof(TransactionResult), (int)carToUpdate.TransactionState) : null),
                         ((carToUpdate.TransactionType.HasValue) ? Enum.GetName(typeof(RegistrationType), (int)carToUpdate.TransactionType) : null)

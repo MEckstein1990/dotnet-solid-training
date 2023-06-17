@@ -22,6 +22,7 @@ namespace DevBasics.CarManagement
         public ILeasingRegistrationRepository LeasingRegistrationRepository { get; set; }
 
         public ICarRegistrationRepository CarLeasingRepository { get; set; }
+        public IGetAppSetting GetAppSetting { get; set; }
 
         public BaseService(
             CarManagementSettings settings,
@@ -31,7 +32,8 @@ namespace DevBasics.CarManagement
             ITransactionStateService transactionStateService = null,
             IRegistrationDetailService registrationDetailService = null,
             ILeasingRegistrationRepository leasingRegistrationRepository = null,
-            ICarRegistrationRepository carLeasingRepository = null)
+            ICarRegistrationRepository carLeasingRepository = null,
+            IGetAppSetting getAppSetting = null)
         {
             // Mandatory
             Settings = settings;
@@ -46,6 +48,8 @@ namespace DevBasics.CarManagement
             // Optional Repositories
             LeasingRegistrationRepository = leasingRegistrationRepository;
             CarLeasingRepository = carLeasingRepository;
+
+            GetAppSetting = getAppSetting;
         }
 
         public async Task<RequestContext> InitializeRequestContextAsync()
@@ -54,7 +58,7 @@ namespace DevBasics.CarManagement
 
             try
             {
-                AppSettingDto settingResult = await LeasingRegistrationRepository.GetAppSettingAsync(HttpHeader.SalesOrgIdentifier, HttpHeader.WebAppType);
+                AppSettingDto settingResult = await GetAppSetting.GetAppSettingAsync(HttpHeader.SalesOrgIdentifier, HttpHeader.WebAppType);
 
                 if (settingResult == null)
                 {

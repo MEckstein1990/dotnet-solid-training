@@ -16,10 +16,13 @@ namespace DevBasics.CarManagement
 
             var bulkRegistrationServiceMock = new BulkRegistrationServiceMock();
             var leasingRegistrationRepository = new LeasingRegistrationRepository();
+            var updateCar = new UpdateCar(new Dictionary<int, Tuple<CarRegistrationDto,string, string, string>>());
+            var insertHistory = new InsertHistory(new Dictionary<int, Tuple<CarRegistrationDto, string, string, string>>());
             var carRegistrationRepositoryMock = new CarRegistrationRepository(
                 leasingRegistrationRepository,
                 bulkRegistrationServiceMock,
-                mapper);
+                mapper,
+                updateCar);
 
             var service = new CarManagementService(
                 mapper,
@@ -30,7 +33,9 @@ namespace DevBasics.CarManagement
                 bulkRegistrationServiceMock,
                 new RegistrationDetailServiceMock(),
                 leasingRegistrationRepository,
-                carRegistrationRepositoryMock);
+                carRegistrationRepositoryMock,
+                insertHistory,
+                updateCar);
 
             var result = await service.RegisterCarsAsync(
                 new RegisterCarsModel
