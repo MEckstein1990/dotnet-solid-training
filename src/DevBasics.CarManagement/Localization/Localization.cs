@@ -1,24 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace DevBasics.CarManagement
+namespace DevBasics.CarManagement.Localization
 {
-    public class CarManagementSettings
+    public class LocalizationHolder : ILocalization
     {
-        public IDictionary<int, string> ApiEndpoints { get; set; } = new Dictionary<int, string>();
-        public IDictionary<string, string> HttpHeaders { get; set; } = new Dictionary<string, string>();
-        public IDictionary<string, string> LanguageCodes { get; set; } = new Dictionary<string, string>();
-        public IDictionary<string, int> TimeZones { get; set; } = new Dictionary<string, int>();
+        public IDictionary<string, string> LanguageCodes { get; set; }
+        public IDictionary<string, int> TimeZones { get; set; }
 
-        public CarManagementSettings()
+        public LocalizationHolder()
         {
-            // Define all Leasing API Endpoints.
-            ApiEndpoints.Add(1, "/bulk-registration-devices");
-            ApiEndpoints.Add(2, "/check-transaction-status");
-            ApiEndpoints.Add(3, "/show-registration-details");
-
-            // Define headers for HTTP-Requests.
-            HttpHeaders.Add("Content-Type", "application/json");
-
             // Define valid language codes (see Leasing API Spec).
             LanguageCodes.Add("Dutch", "nl");
             LanguageCodes.Add("English", "en");

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using DevBasics.CarManagement.CarMangement;
 using DevBasics.CarManagement.Dependencies;
+using DevBasics.CarManagement.Localization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,6 +20,7 @@ namespace DevBasics.CarManagement
             var leasingRegistrationRepository = new LeasingRegistrationRepository();
             var updateCar = new UpdateCar(new Dictionary<int, Tuple<CarRegistrationDto,string, string, string>>());
             var insertHistory = new InsertHistory(new Dictionary<int, Tuple<CarRegistrationDto, string, string, string>>());
+            var localization = new LocalizationHolder();
             var carRegistrationRepositoryMock = new CarRegistrationRepository(
                 leasingRegistrationRepository,
                 bulkRegistrationServiceMock,
@@ -35,6 +38,7 @@ namespace DevBasics.CarManagement
                 leasingRegistrationRepository,
                 carRegistrationRepositoryMock,
                 insertHistory,
+                localization,
                 updateCar);
 
             var result = await service.RegisterCarsAsync(

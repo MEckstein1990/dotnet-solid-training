@@ -1,4 +1,6 @@
-﻿using DevBasics.CarManagement.Dependencies;
+﻿using DevBasics.CarManagement.CarMangement;
+using DevBasics.CarManagement.Dependencies;
+using DevBasics.CarManagement.Localization;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
@@ -7,7 +9,8 @@ namespace DevBasics.CarManagement
 {
     public class BaseService
     {
-        public CarManagementSettings Settings { get; set; }
+        public ICarManagementSettings Settings { get; set; }
+        public ILocalization Localization { get; set; }
 
         public HttpHeaderSettings HttpHeader { get; set; }
 
@@ -25,7 +28,7 @@ namespace DevBasics.CarManagement
         public IGetAppSetting GetAppSetting { get; set; }
 
         public BaseService(
-            CarManagementSettings settings,
+            ICarManagementSettings settings,
             HttpHeaderSettings httpHeader,
             IKowoLeasingApiClient apiClient,
             IBulkRegistrationService bulkRegistrationService = null,
@@ -33,7 +36,8 @@ namespace DevBasics.CarManagement
             IRegistrationDetailService registrationDetailService = null,
             ILeasingRegistrationRepository leasingRegistrationRepository = null,
             ICarRegistrationRepository carLeasingRepository = null,
-            IGetAppSetting getAppSetting = null)
+            IGetAppSetting getAppSetting = null,
+            ILocalization localization = null)
         {
             // Mandatory
             Settings = settings;
@@ -50,6 +54,7 @@ namespace DevBasics.CarManagement
             CarLeasingRepository = carLeasingRepository;
 
             GetAppSetting = getAppSetting;
+            Localization = localization;
         }
 
         public async Task<RequestContext> InitializeRequestContextAsync()
@@ -68,7 +73,7 @@ namespace DevBasics.CarManagement
                 RequestContext requestContext = new RequestContext()
                 {
                     ShipTo = settingResult.SoldTo,
-                    LanguageCode = Settings.LanguageCodes["English"],
+                    LanguageCode = Localization.LanguageCodes["English"],
                     TimeZone = "Europe/Berlin"
                 };
 

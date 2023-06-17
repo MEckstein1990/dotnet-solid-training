@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using DevBasics.CarManagement.CarMangement;
 using DevBasics.CarManagement.Dependencies;
+using DevBasics.CarManagement.Localization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ namespace DevBasics.CarManagement
 
         public CarManagementService(
             IMapper mapper,
-            CarManagementSettings settings,
+            ICarManagementSettings settings,
             HttpHeaderSettings httpHeader,
             IKowoLeasingApiClient apiClient,
             ITransactionStateService transactionStateService,
@@ -26,6 +28,7 @@ namespace DevBasics.CarManagement
             ILeasingRegistrationRepository registrationRepository,
             ICarRegistrationRepository carRegistrationRepository,
             IInsertHistory insertHistory,
+            ILocalization localization,
             IUpdateCar updateCar)
                 : base(settings, httpHeader, apiClient,
                       transactionStateService: transactionStateService,
