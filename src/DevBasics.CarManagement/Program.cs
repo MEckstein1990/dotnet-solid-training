@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DevBasics.CarManagement.CarMangement;
+using DevBasics.CarManagement.CarTyps;
 using DevBasics.CarManagement.Dependencies;
 using DevBasics.CarManagement.Localization;
 using System;
@@ -55,12 +56,13 @@ namespace DevBasics.CarManagement
                             CustomerId = "Customer",
                             VehicleIdentificationNumber = Guid.NewGuid().ToString(),
                             DeliveryDate = DateTime.Now.AddDays(14).Date,
-                            ErpDeliveryNumber = Guid.NewGuid().ToString()
+                            ErpDeliveryNumber = Guid.NewGuid().ToString(),
+                            CarType = new Vw()
                         }
                     }
                 },
                 false,
-                new Claims());
+                new Claims()); ;
         }
     }
 }

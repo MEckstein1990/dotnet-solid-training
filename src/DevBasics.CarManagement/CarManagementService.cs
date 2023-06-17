@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DevBasics.CarManagement.CarMangement;
+using DevBasics.CarManagement.CarTyps;
 using DevBasics.CarManagement.Dependencies;
 using DevBasics.CarManagement.Localization;
 using Newtonsoft.Json;
@@ -82,18 +83,13 @@ namespace DevBasics.CarManagement
                     }
                 }
 
-                CarPoolNumberHelper.Generate(
-                    CarBrand.Toyota,
-                    registerCarsModel.Cars.FirstOrDefault().CarPool,
-                    out string registrationId,
-                    out string carPoolNumber);
-
-                Console.WriteLine($"Created unique car pool number {carPoolNumber} and registration id {registrationId}");
+                //CarPoolNumberHelper.Generate(new Toyota(),registerCarsModel.Cars.FirstOrDefault().CarPool,out string registrationId,out string carPoolNumber);
 
                 DateTime today = DateTime.Now.Date;
+                string registrationId = null;
                 foreach (CarRegistrationModel car in registerCarsModel.Cars)
                 {
-                    car.CarPoolNumber = carPoolNumber;
+                    car.CarType.GenerateRegistrationNumber(car.CarPool, out  registrationId);
                     car.RegistrationId = registrationId;
 
                     // See Bug 281.

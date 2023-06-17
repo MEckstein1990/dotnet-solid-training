@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevBasics.CarManagement.CarTyps;
 using System;
 
 namespace DevBasics.CarManagement.Dependencies
@@ -23,6 +24,7 @@ namespace DevBasics.CarManagement.Dependencies
         public string ErpDeliveryNumber { get; set; }
         public DateTime? RegistrationDate { get; set; }
         public string ErpRegistrationNumber { get; internal set; }
+        public ICarType CarType { get; set; }
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {
